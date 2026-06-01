@@ -3,10 +3,15 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
+
 from app.schemas.product import ProductCreate
 from app.schemas.product import ProductResponse
-from app.services.product_service import ProductService
 from app.schemas.product import ProductUpdate
+
+from app.services.product_service import ProductService
+
+from app.core.permissions import require_admin
+
 
 router = APIRouter(
     prefix="/products",
@@ -21,7 +26,8 @@ router = APIRouter(
 )
 def create_product(
     payload: ProductCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     return ProductService.create_product(
         db,
@@ -36,7 +42,9 @@ def create_product(
 def get_products(
     db: Session = Depends(get_db)
 ):
-    return ProductService.get_all_products(db)
+    return ProductService.get_all_products(
+        db
+    )
 
 
 @router.get(
@@ -52,6 +60,7 @@ def get_product(
         product_id
     )
 
+
 @router.put(
     "/{product_id}",
     response_model=ProductResponse
@@ -59,19 +68,23 @@ def get_product(
 def update_product(
     product_id: str,
     payload: ProductUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     return ProductService.update_product(
         db,
         product_id,
         payload
     )
+
+
 @router.delete(
     "/{product_id}"
 )
 def delete_product(
     product_id: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     return ProductService.delete_product(
         db,

@@ -3,10 +3,15 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
+
 from app.schemas.customer import CustomerCreate
 from app.schemas.customer import CustomerResponse
-from app.services.customer_service import CustomerService
 from app.schemas.customer import CustomerUpdate
+
+from app.services.customer_service import CustomerService
+
+from app.core.permissions import require_admin
+
 
 router = APIRouter(
     prefix="/customers",
@@ -21,7 +26,8 @@ router = APIRouter(
 )
 def create_customer(
     payload: CustomerCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     return CustomerService.create_customer(
         db,
@@ -55,18 +61,6 @@ def get_customer(
     )
 
 
-@router.delete(
-    "/{customer_id}"
-)
-def delete_customer(
-    customer_id: str,
-    db: Session = Depends(get_db)
-):
-    return CustomerService.delete_customer(
-        db,
-        customer_id
-    )
-    
 @router.put(
     "/{customer_id}",
     response_model=CustomerResponse
@@ -74,10 +68,25 @@ def delete_customer(
 def update_customer(
     customer_id: str,
     payload: CustomerUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     return CustomerService.update_customer(
         db,
         customer_id,
         payload
+    )
+
+
+@router.delete(
+    "/{customer_id}"
+)
+def delete_customer(
+    customer_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
+):
+    return CustomerService.delete_customer(
+        db,
+        customer_id
     )

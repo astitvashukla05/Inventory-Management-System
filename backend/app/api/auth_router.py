@@ -4,7 +4,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-
+from app.core.dependencies import get_current_user
 from app.schemas.auth import (
     UserRegister,
     UserResponse
@@ -45,3 +45,12 @@ def login(
         db,
         payload
     )
+@router.get(
+    "/me"
+)
+def get_me(
+    current_user = Depends(
+        get_current_user
+    )
+):
+    return current_user

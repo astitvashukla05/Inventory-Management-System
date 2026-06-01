@@ -12,6 +12,9 @@ from app.schemas.order import (
 
 from app.services.order_service import OrderService
 
+from app.core.permissions import require_admin
+from app.core.dependencies import get_current_user
+
 
 router = APIRouter(
     prefix="/orders",
@@ -26,7 +29,8 @@ router = APIRouter(
 )
 def create_order(
     payload: OrderCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return OrderService.create_order(
         db,
@@ -39,7 +43,8 @@ def create_order(
     response_model=list[OrderResponse]
 )
 def get_orders(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return OrderService.get_all_orders(
         db
@@ -52,11 +57,29 @@ def get_orders(
 )
 def get_order(
     order_id: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return OrderService.get_order_by_id(
         db,
         order_id
+    )
+
+
+@router.put(
+    "/{order_id}",
+    response_model=OrderResponse
+)
+def update_order(
+    order_id: str,
+    payload: OrderUpdate,
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
+):
+    return OrderService.update_order_status(
+        db,
+        order_id,
+        payload
     )
 
 
@@ -65,23 +88,10 @@ def get_order(
 )
 def delete_order(
     order_id: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     return OrderService.delete_order(
         db,
         order_id
     )
-@router.put(
-    "/{order_id}",
-    response_model=OrderResponse
-    )
-def update_order(
-        order_id: str,
-        payload: OrderUpdate,
-        db: Session = Depends(get_db)
-    ):
-        return OrderService.update_order_status(
-            db,
-            order_id,
-            payload
-        )
