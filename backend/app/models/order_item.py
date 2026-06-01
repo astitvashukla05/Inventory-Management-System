@@ -4,6 +4,7 @@ from sqlalchemy import Integer
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from app.models.base import BaseModel
 
@@ -34,4 +35,9 @@ class OrderItem(BaseModel):
     subtotal: Mapped[float] = mapped_column(
         Float,
         nullable=False
+    )
+
+    order: Mapped["Order"] = relationship(
+        "Order",
+        back_populates="items"
     )

@@ -49,3 +49,12 @@ class CustomerRepository:
     ):
         db.delete(customer)
         db.commit()
+    @staticmethod
+    def update(
+    db: Session,
+    customer: Customer
+    ):
+     db.commit()
+     db.refresh(customer)
+
+     return customer

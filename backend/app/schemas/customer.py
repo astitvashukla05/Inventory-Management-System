@@ -4,17 +4,15 @@ from pydantic import Field
 
 
 class CustomerCreate(BaseModel):
-    full_name: str = Field(
-        min_length=2,
-        max_length=255
-    )
-
+    full_name: str = Field(min_length=2, max_length=255)
     email: EmailStr
+    phone: str = Field(min_length=10, max_length=20)
 
-    phone: str = Field(
-        min_length=10,
-        max_length=20
-    )
+
+class CustomerUpdate(BaseModel):
+    full_name: str | None = None
+    email: EmailStr | None = None
+    phone: str | None = None
 
 
 class CustomerResponse(BaseModel):

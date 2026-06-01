@@ -4,6 +4,7 @@ from sqlalchemy import String
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from app.models.base import BaseModel
 
@@ -26,4 +27,10 @@ class Order(BaseModel):
         String(50),
         nullable=False,
         default="PENDING"
+    )
+
+    items: Mapped[list["OrderItem"]] = relationship(
+        "OrderItem",
+        back_populates="order",
+        cascade="all, delete-orphan"
     )
