@@ -3,12 +3,10 @@ from datetime import timedelta
 
 from jose import jwt
 
+from app.core.config import settings
 
-SECRET_KEY = "inventory-secret-key"
 
 ALGORITHM = "HS256"
-
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 
 def create_access_token(
@@ -19,7 +17,7 @@ def create_access_token(
     expire = (
         datetime.utcnow()
         + timedelta(
-            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     )
 
@@ -31,6 +29,6 @@ def create_access_token(
 
     return jwt.encode(
         to_encode,
-        SECRET_KEY,
+        settings.SECRET_KEY,
         algorithm=ALGORITHM
     )

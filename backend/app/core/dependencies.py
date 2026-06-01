@@ -7,7 +7,7 @@ from fastapi.security import HTTPAuthorizationCredentials
 from jose import JWTError
 from jose import jwt
 
-from app.core.security import SECRET_KEY
+from app.core.config import settings
 from app.core.security import ALGORITHM
 
 
@@ -24,7 +24,7 @@ def get_current_user(
     try:
         payload = jwt.decode(
             token,
-            SECRET_KEY,
+            settings.SECRET_KEY,
             algorithms=[ALGORITHM]
         )
 
