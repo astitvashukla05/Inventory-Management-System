@@ -17,6 +17,12 @@ class OrderService:
         data
     ):
 
+        if not data.items:
+            raise HTTPException(
+                status_code=400,
+                detail="Order must contain at least one item"
+            )
+
         customer = CustomerRepository.get_by_id(
             db,
             data.customer_id
@@ -28,18 +34,9 @@ class OrderService:
                 detail="Customer not found"
             )
 
-        order = Order(
-            customer_id=data.customer_id,
-            total_amount=0,
-            status="PENDING"
-        )
-
-        order = OrderRepository.create(
-            db,
-            order
-        )
-
         total_amount = 0
+
+        validated_products = []
 
         for item in data.items:
 
@@ -65,12 +62,37 @@ class OrderService:
                 item.quantity
             )
 
+            total_amount += subtotal
+
+            validated_products.append(
+                {
+                    "product": product,
+                    "quantity": item.quantity,
+                    "subtotal": subtotal
+                }
+            )
+
+        order = Order(
+            customer_id=data.customer_id,
+            total_amount=total_amount,
+            status="PENDING"
+        )
+
+        order = OrderRepository.create(
+            db,
+            order
+        )
+
+        for item_data in validated_products:
+
+            product = item_data["product"]
+
             order_item = OrderItem(
                 order_id=order.id,
                 product_id=product.id,
-                quantity=item.quantity,
+                quantity=item_data["quantity"],
                 unit_price=product.price,
-                subtotal=subtotal
+                subtotal=item_data["subtotal"]
             )
 
             OrderItemRepository.create(
@@ -78,21 +100,12 @@ class OrderService:
                 order_item
             )
 
-            product.quantity -= item.quantity
+            product.quantity -= item_data["quantity"]
 
             ProductRepository.update(
                 db,
                 product
             )
-
-            total_amount += subtotal
-
-        order.total_amount = total_amount
-
-        OrderRepository.update(
-            db,
-            order
-        )
 
         return order
 
@@ -153,6 +166,7 @@ class OrderService:
         return {
             "message": "Order deleted successfully"
         }
+
     @staticmethod
     def update_order_status(
         db,
