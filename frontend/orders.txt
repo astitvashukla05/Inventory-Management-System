@@ -1,0 +1,312 @@
+  <div
+    style={{
+      display: "flex",
+    }}
+  >
+    <Sidebar />
+
+    <div
+      style={{
+        flex: 1,
+        padding: "30px",
+      }}
+    >
+      <h1
+        style={{
+          fontSize: "32px",
+        }}
+      >
+        Customers
+      </h1>
+
+      <p
+        style={{
+          color: "#64748b",
+          marginTop: "8px",
+          marginBottom:
+            "30px",
+        }}
+      >
+        Manage customer
+        records
+      </p>
+
+      <div
+        style={{
+          background:
+            "white",
+          padding: "25px",
+          borderRadius:
+            "14px",
+          boxShadow:
+            "var(--shadow)",
+          marginBottom:
+            "30px",
+        }}
+      >
+        <h2
+          style={{
+            marginBottom:
+              "20px",
+          }}
+        >
+          {editingId
+            ? "Edit Customer"
+            : "Add Customer"}
+        </h2>
+
+        <form
+          onSubmit={
+            handleSubmit
+          }
+        >
+          <div
+            style={{
+              display:
+                "grid",
+              gridTemplateColumns:
+                "repeat(2,1fr)",
+              gap: "15px",
+            }}
+          >
+            <input
+              type="text"
+              name="full_name"
+              placeholder="Full Name"
+              value={
+                formData.full_name
+              }
+              onChange={
+                handleChange
+              }
+              required
+            />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={
+                formData.email
+              }
+              onChange={
+                handleChange
+              }
+              required
+            />
+
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone"
+              value={
+                formData.phone
+              }
+              onChange={
+                handleChange
+              }
+              required
+            />
+          </div>
+
+          <div
+            style={{
+              marginTop:
+                "20px",
+              display:
+                "flex",
+              gap: "10px",
+            }}
+          >
+            <button
+              type="submit"
+              style={{
+                background:
+                  "#3b82f6",
+                color:
+                  "white",
+              }}
+            >
+              {editingId
+                ? "Update Customer"
+                : "Add Customer"}
+            </button>
+
+            {editingId && (
+              <button
+                type="button"
+                onClick={
+                  resetForm
+                }
+                style={{
+                  background:
+                    "#64748b",
+                  color:
+                    "white",
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      <div
+        style={{
+          background:
+            "white",
+          padding: "25px",
+          borderRadius:
+            "14px",
+          boxShadow:
+            "var(--shadow)",
+        }}
+      >
+        <div
+          style={{
+            display:
+              "flex",
+            justifyContent:
+              "space-between",
+            alignItems:
+              "center",
+            marginBottom:
+              "20px",
+          }}
+        >
+          <h2>
+            Customer List
+          </h2>
+
+          <input
+            type="text"
+            placeholder="Search customer..."
+            value={search}
+            onChange={(e) =>
+              setSearch(
+                e.target.value
+              )
+            }
+            style={{
+              width:
+                "300px",
+            }}
+          />
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Customer
+              </th>
+              <th>
+                Email
+              </th>
+              <th>
+                Phone
+              </th>
+              <th>
+                Actions
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filteredCustomers.length >
+            0 ? (
+              filteredCustomers.map(
+                (
+                  customer
+                ) => (
+                  <tr
+                    key={
+                      customer.id
+                    }
+                  >
+                    <td>
+                      {
+                        customer.full_name
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        customer.email
+                      }
+                    </td>
+
+                    <td>
+                      {
+                        customer.phone
+                      }
+                    </td>
+
+                    <td>
+                      <div
+                        style={{
+                          display:
+                            "flex",
+                          gap: "8px",
+                        }}
+                      >
+                        <button
+                          onClick={() =>
+                            handleEdit(
+                              customer
+                            )
+                          }
+                          style={{
+                            background:
+                              "#3b82f6",
+                            color:
+                              "white",
+                          }}
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleDelete(
+                              customer.id
+                            )
+                          }
+                          style={{
+                            background:
+                              "#ef4444",
+                            color:
+                              "white",
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              )
+            ) : (
+              <tr>
+                <td
+                  colSpan="4"
+                  style={{
+                    textAlign:
+                      "center",
+                    padding:
+                      "40px",
+                    color:
+                      "#64748b",
+                  }}
+                >
+                  No customers found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</>

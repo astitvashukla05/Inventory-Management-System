@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-
+import "@fontsource/inter";
 import App from "./App";
-
+import { Toaster } from "react-hot-toast";
 import "./index.css";
 
 ReactDOM.createRoot(
@@ -12,6 +12,7 @@ ReactDOM.createRoot(
   <React.StrictMode>
     <BrowserRouter>
       <App />
+       <Toaster />
     </BrowserRouter>
   </React.StrictMode>
 );

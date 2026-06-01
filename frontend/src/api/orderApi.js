@@ -21,6 +21,19 @@ export const createOrder = async (
   return response.data;
 };
 
+export const updateOrder = async (
+  id,
+  orderData
+) => {
+  const response =
+    await axiosClient.put(
+      `/orders/${id}`,
+      orderData
+    );
+
+  return response.data;
+};
+
 export const deleteOrder = async (
   id
 ) => {
