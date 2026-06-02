@@ -105,12 +105,20 @@ function Orders() {
     }
   };
 
-  const handleDelete = async (id) => {
-    const confirmed = window.confirm("Delete this order?");
-    if (!confirmed) return;
-    await deleteProduct(id);
+const handleDelete = async (id) => {
+  const confirmed = window.confirm("Delete this order?");
+  if (!confirmed) return;
+
+  try {
+    await deleteOrder(id);
     await loadData();
-  };
+  } catch (error) {
+    alert(
+      error?.response?.data?.detail ||
+      "Failed to delete order"
+    );
+  }
+};
 
   const totalRevenue = orders.reduce((sum, order) => sum + (order.total_amount || 0), 0);
   const pendingOrders = orders.filter(o => o.status === "PENDING").length;

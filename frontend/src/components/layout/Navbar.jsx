@@ -22,8 +22,6 @@ function Navbar() {
       position: "sticky",
       top: 0,
       zIndex: 50,
-      backdropFilter: "blur(8px)",
-      background: "rgba(255,255,255,0.95)",
     }}>
       {/* Logo Section */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
@@ -97,7 +95,7 @@ function Navbar() {
                 <div style={{
                   padding: "1rem",
                   borderBottom: "1px solid var(--border)",
-                  background: "var(--gray-50)"
+                  background: "var(--bg-tertiary)"
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     <div style={{
@@ -113,7 +111,7 @@ function Navbar() {
                       👤
                     </div>
                     <div>
-                      <p style={{ fontWeight: "600", margin: 0, fontSize: "0.875rem" }}>Admin User</p>
+                      <p style={{ fontWeight: "600", margin: 0, fontSize: "0.875rem", color: "var(--text-primary)" }}>Admin User</p>
                       <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", margin: 0 }}>admin@example.com</p>
                     </div>
                   </div>
@@ -134,7 +132,7 @@ function Navbar() {
                     color: "var(--danger)",
                     transition: "background 0.2s ease"
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = "var(--gray-50)"}
+                  onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-tertiary)"}
                   onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                 >
                   <span>🚪</span>
@@ -144,15 +142,6 @@ function Navbar() {
             </>
           )}
         </div>
-
-        {/* Logout Button (Visible on mobile) */}
-        <button
-          onClick={handleLogout}
-          className="btn-danger"
-          style={{ display: "none", "@media (max-width: 640px)": { display: "block" } }}
-        >
-          Logout
-        </button>
       </div>
     </nav>
   );

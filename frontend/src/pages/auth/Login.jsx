@@ -38,7 +38,7 @@ function Login() {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      background: "var(--bg-primary)",
       padding: "1rem",
     }}>
       <div className="card" style={{
@@ -62,7 +62,7 @@ function Login() {
           }}>
             📦
           </div>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: "700", marginBottom: "0.5rem" }}>
+          <h1 style={{ fontSize: "1.75rem", fontWeight: "700", marginBottom: "0.5rem", color: "var(--text-primary)" }}>
             Welcome Back
           </h1>
           <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
@@ -130,7 +130,7 @@ function Login() {
         }}>
           <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
             Don't have an account?{" "}
-            <Link to="/register" style={{ fontWeight: "600" }}>
+            <Link to="/register" style={{ fontWeight: "600", color: "var(--primary)" }}>
               Create Account →
             </Link>
           </p>
